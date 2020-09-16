@@ -1,0 +1,8 @@
+name        = "[beta] Combat Equipment"
+source_dir  = "source"
+output_dir  = "output"
+description = [=[Gives Marines a sentry upgrade.]=]
+image       = "preview.jpg"
+tag_modtype = "Gameplay Tweak"
+tag_support = "Must be run on Server"
+publish_id = "84f2921e"

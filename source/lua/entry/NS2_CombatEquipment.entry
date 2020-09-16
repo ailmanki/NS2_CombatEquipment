@@ -1,0 +1,5 @@
+modEntry = {
+    Shared = "lua/NS2_CombatEquipment/Shared.lua",
+    FileHooks = "lua/NS2_CombatEquipment/Filehooks.lua",
+    Priority = 90
+}
