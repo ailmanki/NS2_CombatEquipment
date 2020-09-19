@@ -36,10 +36,9 @@ if Client then
                 usageAllowed = usageAllowed and (gameStarted or (ent.GetUseAllowedBeforeGameStart and ent:GetUseAllowedBeforeGameStart())) -- check if entity can be used before game start
                 usageAllowed = usageAllowed and (not GetWarmupActive() or not ent.GetCanBeUsedDuringWarmup or ent:GetCanBeUsedDuringWarmup()) -- check if entity can be used during warmup
                 if usageAllowed then
-                    
-                    if GetPlayerCanUseEntity(self, ent) and not self:GetIsUsing() then
+                    if GetPlayerCanUseEntity(self, ent) then
                         
-                        if ent:isa("CommandStation") and ent:GetIsBuilt() then
+                        if ent:isa("CommandStation") and ent:GetIsBuilt() and not self:GetIsUsing() then
                             local hintText = gameStarted and "START_COMMANDING" or "START_GAME"
                             self.actionIconGUI:ShowIcon(BindingsUI_GetInputValue("Use"), nil, hintText, nil)
                             success = true
@@ -50,12 +49,10 @@ if Client then
                             if hintFraction <= 1.0 then
                                 local hintText = "DESTROY"
                                 self.actionIconGUI:ShowIcon(BindingsUI_GetInputValue("Use"), nil, hintText, hintFraction)
+                                
                                 success = true
                             end
-
-
-                        --else
-                           -- self.actionIconGUI:ShowIcon(BindingsUI_GetInputValue("Use"), nil, nil, nil)
+                            
                         end
                         
                     end
