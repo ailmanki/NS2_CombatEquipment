@@ -7,6 +7,16 @@ local function ShouldResupplySentry(player)
 	if not player:GetIsAlive() then
 		return false
 	end
+	if player:GetHasCombatUpgrade(kCombatUpgrades.Sentries) then
+		
+		local ownerId = player:GetId()
+		for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
+			--Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
+			if sentry.ownerId == ownerId then
+				return false
+			end
+		end
+	end
 	
 	local sentrySlotWeapon = player:GetWeaponInHUDSlot(BuildSentry.GetHUDSlot())
 	return not sentrySlotWeapon and (not player._lastSentry or player._lastSentry + sentryResupplyTime < Shared.GetTime())
@@ -40,19 +50,19 @@ function Armory:GetShouldResupplyPlayer(player)
 	if not shouldResupply then
 		
 		if ShouldResupplySentry(player) then
-			
-			if player:GetHasCombatUpgrade(kCombatUpgrades.Sentries) then
-				shouldResupply = true
-				
-				local ownerId = player:GetId()
-				for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
-					--Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
-					if sentry.ownerId == ownerId then
-						shouldResupply = false
-						break
-					end
-				end
-			end
+			shouldResupply = true
+			--if player:GetHasCombatUpgrade(kCombatUpgrades.Sentries) then
+			--	shouldResupply = true
+			--
+			--	local ownerId = player:GetId()
+			--	for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
+			--		Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
+			--		if sentry.ownerId == ownerId then
+			--			shouldResupply = false
+			--			break
+			--		end
+			--	end
+			--end
 		
 		end
 	end
