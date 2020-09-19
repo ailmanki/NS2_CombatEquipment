@@ -76,7 +76,7 @@ function BuildSentry:GetDropMapName()
 end
 
 function BuildSentry:GetHUDSlot()
-    return 4
+    return 5
 end
 
 function BuildSentry:Build()
