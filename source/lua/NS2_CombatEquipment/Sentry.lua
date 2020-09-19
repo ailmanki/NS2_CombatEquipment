@@ -122,17 +122,9 @@ end
 local oldOnDestroy = Sentry.OnDestroy
 function Sentry:OnDestroy()
     if Server then
-        --local team = self:GetTeam()
-        --if team then
-        --    team:UpdateClientOwnedStructures(self:GetId())
-        --end
         local player = self:GetOwner()
-        if player then
-            if (self.consumed) then
-                player:AddResources(1)
-            else
-                player:AddResources(1)
-            end
+        if player and self.consumed and player:GetIsAlive() then
+            player:GiveItem(BuildSentry.kMapName)
         end
     end
    
@@ -145,4 +137,4 @@ local networkVars =
 }
 
 Shared.LinkClassToMap("Sentry", Sentry.kMapName, networkVars, true)
-Class_Reload("Sentry")
+--Class_Reload("Sentry")
