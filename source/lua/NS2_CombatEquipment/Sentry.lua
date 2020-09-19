@@ -104,6 +104,19 @@ function Sentry:GetUnitNameOverride(viewer)
 
 end
 
+-- fixes blueprint leftover on comsume
+local oldKill = Sentry.Kill
+function Sentry:Kill()
+    
+    if self.GetIsGhostStructure and self:GetIsGhostStructure() then
+        -- make it poof!
+        self:SetHealth(0)
+        self:OnTakeDamage(0)
+        return
+    end
+    oldKill(self)
+end
+
 local oldOnDestroy = Sentry.OnDestroy
 function Sentry:OnDestroy()
     if Server then
@@ -120,7 +133,7 @@ function Sentry:OnDestroy()
             end
         end
     end
-    
+   
     oldOnDestroy(self)
 end
 
