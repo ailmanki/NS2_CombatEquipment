@@ -28,7 +28,7 @@ end
 local oldDescFunc = CombatMarineBuy_GetWeaponDescription
 function CombatMarineBuy_GetWeaponDescription(techId)
 	if techId == kTechId.DropSentry then
-		return "Provides a deployable Sentry. Requires Armor 2."
+		return "You get 1 Sentry that can be resupplied at an armory if it gets destroyed. Requires Armor 2 and a Welder to build."
 	end
 	return oldDescFunc(techId)
 end
