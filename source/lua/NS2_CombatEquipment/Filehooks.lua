@@ -19,6 +19,7 @@ ModLoader.SetupFileHook( "lua/Combat/Globals.lua","lua/NS2_CombatEquipment/Balan
 ModLoader.SetupFileHook( "lua/Combat/Player_Upgrades.lua","lua/NS2_CombatEquipment/Combat/Player_Upgrades.lua", "post" )
 
 -- add sentry to combat!
+ModLoader.SetupFileHook( "lua/Combat/CombatMarineUpgrade.lua", "lua/NS2_CombatEquipment/Combat/CombatMarineUpgrade.lua", "post" )
 ModLoader.SetupFileHook( "lua/Combat/ExperienceData.lua", "lua/NS2_CombatEquipment/Combat/ExperienceData.lua", "post" )
 ModLoader.SetupFileHook( "lua/Combat/ExperienceEnums.lua", "lua/NS2_CombatEquipment/Combat/ExperienceEnums.lua", "post" )
 ModLoader.SetupFileHook( "lua/Combat/MarineBuyFuncs.lua", "lua/NS2_CombatEquipment/Combat/MarineBuyFuncs.lua", "post" )
