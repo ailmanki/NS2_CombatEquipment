@@ -8,6 +8,7 @@ ModLoader.SetupFileHook( "lua/Player.lua", 	"lua/NS2_CombatEquipment/Player.lua"
 
 ModLoader.SetupFileHook( "lua/TechTreeButtons.lua", 	"lua/NS2_CombatEquipment/TechTreeButtons.lua", "post" )
 ModLoader.SetupFileHook( "lua/MarineActionFinderMixin.lua", "lua/NS2_CombatEquipment/MarineActionFinderMixin.lua", "post" )
+ModLoader.SetupFileHook( "lua/MarineTeam.lua", "lua/NS2_CombatEquipment/MarineTeam.lua", "post" )
 
 
 ModLoader.SetupFileHook( "lua/Balance.lua",				"lua/NS2_CombatEquipment/Balance.lua", "post" )
