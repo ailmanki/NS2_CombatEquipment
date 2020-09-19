@@ -114,7 +114,9 @@ function Sentry:Kill()
         self:OnTakeDamage(0)
         return
     end
-    oldKill(self)
+    if oldKill then
+        oldKill(self)
+    end
 end
 
 local oldOnDestroy = Sentry.OnDestroy
