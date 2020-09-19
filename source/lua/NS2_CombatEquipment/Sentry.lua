@@ -18,6 +18,24 @@ function Sentry:GetCanConsumeOverride()
     return false
 end
 
+-- Called by ConstructMixing:OnUse
+function Sentry:GetCanConstruct(player)
+    if self.GetCanConstructOverride then
+        return self:GetCanConstructOverride(player)
+    end
+    
+    -- Check if we're on infestation
+    -- Doing the origin-based check may be expensive, but this is only done sparsely. And better than tracking infestation all the time.
+    if LookupTechData(self:GetTechId(), kTechDataNotOnInfestation) and GetIsPointOnInfestation(self:GetOrigin()) then
+        return false
+    end
+    
+    local activeWeapon = player:GetActiveWeapon()
+    
+    return not self:GetIsBuilt() and GetAreFriends(self, player) and self:GetIsAlive() and
+            (not player or player:isa("Marine") or player:isa("MAC")) and activeWeapon and activeWeapon:GetMapName() == Welder.kMapName
+end
+
 local oldOnCreate = Sentry.OnCreate
 function Sentry:OnCreate()
     oldOnCreate(self)
