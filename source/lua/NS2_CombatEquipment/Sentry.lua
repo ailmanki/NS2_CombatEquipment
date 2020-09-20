@@ -40,6 +40,12 @@ local oldOnCreate = Sentry.OnCreate
 function Sentry:OnCreate()
     oldOnCreate(self)
     InitMixin(self, DigestMixin)
+    
+end
+
+local oldSetLagCompensated = Sentry.SetLagCompensated
+function Sentry:SetLagCompensated(compensate)
+    oldSetLagCompensated(self, true)
 end
 
 -- CQ: Predates Mixins, somewhat hackish
