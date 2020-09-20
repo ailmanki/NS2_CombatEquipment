@@ -1,5 +1,31 @@
 Script.Load("lua/DigestMixin.lua")
 
+
+---- Balance
+--Sentry.kPingInterval = 4
+---- kFov 160 default
+Sentry.kFov = 180
+--Sentry.kMaxPitch = 80 -- 160 total
+--Sentry.kMaxYaw = Sentry.kFov / 2
+--Sentry.kTargetScanDelay = 1.5
+
+--Sentry.kBaseROF = kSentryAttackBaseROF
+--Sentry.kRandROF = kSentryAttackRandROF
+--Sentry.kSpread = Math.Radians(3)
+--Sentry.kBulletsPerSalvo = kSentryAttackBulletsPerSalvo
+--Sentry.kBarrelScanRate = 60      -- Degrees per second to scan back and forth with no target
+--Sentry.kBarrelMoveRate = 150    -- Degrees per second to move sentry orientation towards target or back to flat when targeted
+--Sentry.kBarrelMoveTargetMult = 4 -- when a target is acquired, how fast to swivel the barrel
+---- kRange 20 default
+Sentry.kRange = 30
+--Sentry.kReorientSpeed = .05
+
+--Sentry.kTargetAcquireTime = 0.15
+--Sentry.kConfuseDuration = 4
+--Sentry.kAttackEffectIntervall = 0.2
+--Sentry.kConfusedAttackEffectInterval = kConfusedSentryBaseROF
+-- balance end
+
 Script.kMaxUseableRange = 6.5
 local kDigestDuration = 1.5
 
