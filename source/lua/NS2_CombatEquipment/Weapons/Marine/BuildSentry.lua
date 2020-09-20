@@ -115,7 +115,7 @@ function BuildSentry:OnPrimaryAttackEnd()
 end
 
 function BuildSentry:GetIsDroppable()
-    return true
+    return false
 end
 
 function BuildSentry:OnPrimaryAttack(player)
