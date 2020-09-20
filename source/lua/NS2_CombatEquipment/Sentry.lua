@@ -119,6 +119,17 @@ function Sentry:Kill()
     end
 end
 
+function Sentry:ComputeDamageOverride(attacker, damage, damageType, hitPoint)
+    
+    -- Lerk spikes do double damage to mines.
+    if (damageType == kDamageType.Puncture and attacker:isa("Lerk")) or (damageType == kDamageType.Corrode and attacker:isa("Gorge"))  then
+        damage = damage * 0.5
+    end
+    
+    return damage
+
+end
+
 local oldOnDestroy = Sentry.OnDestroy
 function Sentry:OnDestroy()
     if Server then
