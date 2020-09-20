@@ -231,6 +231,7 @@ function BuildSentry:Dropped(prevOwner)
     
 end
 
+local kUpVector = Vector(0, 1, 0)
 -- Given a gorge player's position and view angles, return a position and orientation
 -- for structure. Used to preview placement via a ghost structure and then to create it.
 -- Also returns bool if it's a valid position or not.
@@ -254,7 +255,7 @@ function BuildSentry:GetPositionForStructure(player)
         trace = Shared.TraceRay(origin, origin - Vector(0, kPlacementDistance, 0), CollisionRep.Default, PhysicsMask.AllButPCsAndRagdolls, EntityFilterTwo(player, self))
         
     end
-
+    
     
     -- If it hits something, position on this surface (must be the world or another structure)
     if trace.fraction < 1 then
@@ -278,7 +279,12 @@ function BuildSentry:GetPositionForStructure(player)
         if GetPointBlocksAttachEntities(displayOrigin) then
             isPositionValid = false
         end
-    
+        
+        --Print("dot: %.2f ", dot)
+        if Math.DotProduct(trace.normal, kUpVector) < 0.0 then
+            isPositionValid = false -- keep processing so we get a better visualization.
+        end
+        
         -- Don't allow placing above or below us and don't draw either
         local structureFacing = player:GetViewAngles():GetCoords().zAxis
     
