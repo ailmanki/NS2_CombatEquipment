@@ -11,7 +11,7 @@ You get 1 Sentry. Requires Armor 2 and a Welder to build.
 
 Changes to Sentry balance:
 - the range is increased by 50%
-- fov increased to 180° from 160°
+- fov increased from 160° to 180°
 - halfed dmg from gorge bile and lerk spikes
 
 
