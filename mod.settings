@@ -1,7 +1,15 @@
-name        = "[beta] Combat Equipment"
+name        = "Combat Equipment"
 source_dir  = "source"
 output_dir  = "output"
-description = [=[Gives Marines a sentry upgrade.]=]
+description = [=["[h1] Combat Equipment [/h1]
+ModID: [i]84F2921E[/i]
+
+You get 1 Sentry. Requires Armor 2 and a Welder to build.
+
+Code and ideas reused from the following mods, with most coming from Last Stand:
+- [Hades Device](https://steamcommunity.com/sharedfiles/filedetails/?id=873978863)
+- [Last Stand](https://steamcommunity.com/sharedfiles/filedetails/?id=635568146)
+- [Personal Shield Gnenerator](https://steamcommunity.com/sharedfiles/filedetails/?id=1173477213)"]=]
 image       = "preview.jpg"
 tag_modtype = "Gameplay Tweak"
 tag_support = "Must be run on Server"
