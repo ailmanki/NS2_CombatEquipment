@@ -123,7 +123,7 @@ local oldOnDestroy = Sentry.OnDestroy
 function Sentry:OnDestroy()
     if Server then
         local player = self:GetOwner()
-        if player and self.consumed and player:GetIsAlive() then
+        if player and player:GetIsAlive() then
             player:GiveItem(BuildSentry.kMapName)
         end
     end
