@@ -9,6 +9,11 @@ ModID: `84F2921E`
 
 You get 1 Sentry. Requires Armor 2 and a Welder to build.
 
+Changes to Sentry balance:
+- the range is increased by 50%
+- fov increased to 180° from 160°
+- halfed dmg from gorge bile and lerk spikes
+
 
 Code and ideas reused from the following mods, with most coming from Last Stand:
 - [Hades Device](https://steamcommunity.com/sharedfiles/filedetails/?id=873978863)
