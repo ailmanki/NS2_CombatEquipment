@@ -31,12 +31,12 @@ function CombatMarineUpgrade:TeamSpecificLogic(player)
 			
 			else
 				-- if this is a primary weapon, destroy the old one.
-				local weapon = player:GetWeaponInHUDSlot(BuildSentry:GetHUDSlot())
-				if (weapon) then
-					player:RemoveWeapon(weapon)
-					DestroyEntity(weapon)
-					self:GiveItem(player)
-				else
+				--local weapon = player:GetWeaponInHUDSlot(BuildSentry:GetHUDSlot())
+				--if (weapon) then
+				--	player:RemoveWeapon(weapon)
+				--	DestroyEntity(weapon)
+				--	self:GiveItem(player)
+				--else
 					local ownerId = player:GetId()
 					local shouldResupply = true
 					for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
@@ -49,7 +49,7 @@ function CombatMarineUpgrade:TeamSpecificLogic(player)
 					if shouldResupply then
 						self:GiveItem(player)
 					end
-				end
+				--end
 				return true
 			end
 		end
