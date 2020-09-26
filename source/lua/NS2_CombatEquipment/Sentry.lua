@@ -26,7 +26,14 @@ Sentry.kRange = 30
 --Sentry.kConfusedAttackEffectInterval = kConfusedSentryBaseROF
 -- balance end
 
-Script.kMaxUseableRange = 6.5
+Sentry.kMaxUseableRange = 6.5
+
+
+local networkVars =
+{
+    ownerId = "entityid"
+}
+
 local kDigestDuration = 1.5
 
 function Sentry:GetDigestDuration()
@@ -68,6 +75,7 @@ function Sentry:OnCreate()
     InitMixin(self, DigestMixin)
     
 end
+
 
 local oldSetLagCompensated = Sentry.SetLagCompensated
 function Sentry:SetLagCompensated(compensate)
@@ -173,7 +181,7 @@ function Sentry:OnDestroy()
             end
             
             player:GiveItem(BuildSentry.kMapName)
-    
+            
             if activeWeapon and activeWeapon:GetMapName() then
                 player:SetActiveWeapon(activeWeapon:GetMapName())
             end
@@ -182,11 +190,6 @@ function Sentry:OnDestroy()
    
     oldOnDestroy(self)
 end
-
-local networkVars =
-{
-    ownerId = "entityid"
-}
 
 Shared.LinkClassToMap("Sentry", Sentry.kMapName, networkVars, true)
 --Class_Reload("Sentry")

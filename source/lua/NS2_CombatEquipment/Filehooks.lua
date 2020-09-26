@@ -14,6 +14,7 @@ ModLoader.SetupFileHook( "lua/Armory_Server.lua", "lua/NS2_CombatEquipment/Armor
 
 ModLoader.SetupFileHook( "lua/Balance.lua",				"lua/NS2_CombatEquipment/Balance.lua", "post" )
 ModLoader.SetupFileHook( "lua/Combat/Globals.lua","lua/NS2_CombatEquipment/BalanceCombat.lua", "post" )
+ModLoader.SetupFileHook( "lua/Combat/FileHooks/Post/Armory_Server.lua","lua/NS2_CombatEquipment/Combat/Armory_Server.lua", "replace" )
 
 -- On certain "reset" event destroy structures from the player
 ModLoader.SetupFileHook( "lua/Combat/Player_Upgrades.lua","lua/NS2_CombatEquipment/Combat/Player_Upgrades.lua", "post" )
@@ -23,3 +24,8 @@ ModLoader.SetupFileHook( "lua/Combat/CombatMarineUpgrade.lua", "lua/NS2_CombatEq
 ModLoader.SetupFileHook( "lua/Combat/ExperienceData.lua", "lua/NS2_CombatEquipment/Combat/ExperienceData.lua", "post" )
 ModLoader.SetupFileHook( "lua/Combat/ExperienceEnums.lua", "lua/NS2_CombatEquipment/Combat/ExperienceEnums.lua", "post" )
 ModLoader.SetupFileHook( "lua/Combat/MarineBuyFuncs.lua", "lua/NS2_CombatEquipment/Combat/MarineBuyFuncs.lua", "post" )
+
+
+ModLoader.SetupFileHook( "lua/Hud/GUIInventory.lua", "lua/NS2_CombatEquipment/GUIInventory.lua", "post" )
+ModLoader.SetupFileHook( "lua/Weapons/Marine/LayMines.lua", "lua/NS2_CombatEquipment/Weapons/Marine/LayMines.lua", "post" )
+ModLoader.SetupFileHook( "lua/WeaponOwnerMixin.lua", "lua/NS2_CombatEquipment/WeaponOwnerMixin.lua", "post" )

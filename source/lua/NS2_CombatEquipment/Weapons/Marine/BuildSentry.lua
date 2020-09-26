@@ -17,6 +17,7 @@ local kPlacementDistance = 2
 
 local networkVars =
 {
+    hasMine = "private boolean",
     droppingSentry = "boolean"
 }
 
@@ -27,7 +28,81 @@ function BuildSentry:OnCreate()
     InitMixin(self, PickupableWeaponMixin)
     
     self.droppingSentry = false
+    self.hasMine = false
     
+end
+
+function BuildSentry:GetHasSecondary(player)
+    return self.hasMine
+end
+
+
+if Server then
+    function BuildSentry:SwitchToMine(player)
+        self.secondaryAttacking = false
+        -- GiveItem removes sentry not by itself
+        player:RemoveWeapon(self)
+        DestroyEntity(self)
+        
+        local newMine = player:GiveItem(LayMines.kMapName)
+        newMine.hasSentry = true
+        player:SetHUDSlotActive(newMine:GetHUDSlot()) -- switch to it
+    end
+    
+    function BuildSentry:OnSecondaryAttack(player)
+        self.secondaryAttacking = true
+        Weapon.OnSecondaryAttack(self, player)
+    end
+    
+    function BuildSentry:OnSecondaryAttackEnd(player)
+        if self.secondaryAttacking and self.hasMine then
+            self:SwitchToMine(player)
+        end
+        self.secondaryAttacking = false
+    end
+end
+
+if Client then
+    
+    function BuildSentry:CreateSwitchInfo()
+        
+        if not self.switchInfo then
+            self.switchInfo = GetGUIManager():CreateGUIScript("NS2_CombatEquipment/GUISwitchInfo")
+            self.switchInfo:SetSwitchName("Mine")
+        end
+    
+    end
+    
+    function BuildSentry:DestroySwitchInfo()
+        if self.switchInfo ~= nil then
+            GetGUIManager():DestroyGUIScript(self.switchInfo)
+            self.switchInfo = nil
+        end
+    end
+    
+    local function UpdateGUI(self, player)
+        local localPlayer = Client.GetLocalPlayer()
+        if localPlayer == player then
+            self:CreateSwitchInfo()
+        end
+        
+        if self.switchInfo then
+            self.switchInfo:SetIsVisible(player and localPlayer == player and self.hasMine and self:GetIsActive() and not HelpScreen_GetHelpScreen():GetIsBeingDisplayed())
+        end
+    end
+    
+    function BuildSentry:OnUpdateRender()
+        UpdateGUI(self, self:GetParent())
+    end
+    
+    function BuildSentry:OnDestroy()
+         self:DestroySwitchInfo()
+         Ability.OnDestroy(self)
+    end
+end
+
+function BuildSentry:GetSecondaryAttackRequiresPress()
+    return true
 end
 
 function BuildSentry:OnInitialized()
@@ -76,7 +151,7 @@ function BuildSentry:GetDropMapName()
 end
 
 function BuildSentry:GetHUDSlot()
-    return 5
+    return 4
 end
 
 function BuildSentry:Build()
@@ -87,7 +162,14 @@ function BuildSentry:Build()
         self:PerformPrimaryAttack(player)
 
         self:OnHolster(player)
+        
         player:RemoveWeapon(self)
+    
+        if Server and self.hasMine then
+            local newLayMines = player:GiveItem(LayMines.kMapName)
+            newLayMines.hasSentry = false
+        end
+        
         player:SwitchWeapon(1)
             
         if Server then                
@@ -115,7 +197,7 @@ function BuildSentry:OnPrimaryAttackEnd()
 end
 
 function BuildSentry:GetIsDroppable()
-    return false
+    return true
 end
 
 function BuildSentry:OnPrimaryAttack(player)
