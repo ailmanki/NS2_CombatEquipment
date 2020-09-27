@@ -19,4 +19,5 @@ Code and ideas reused from the following mods, with most coming from Last Stand:
 - [Hades Device](https://steamcommunity.com/sharedfiles/filedetails/?id=873978863)
 - [Last Stand](https://steamcommunity.com/sharedfiles/filedetails/?id=635568146)
 - [Personal Shield Gnenerator](https://steamcommunity.com/sharedfiles/filedetails/?id=1173477213)
+- [Weapon Switch Improvements](https://steamcommunity.com/sharedfiles/filedetails/?id=1218273658)
 
