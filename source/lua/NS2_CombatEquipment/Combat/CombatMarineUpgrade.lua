@@ -41,7 +41,7 @@ function CombatMarineUpgrade:TeamSpecificLogic(player)
 					local shouldResupply = true
 					for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
 						--Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
-						if sentry.ownerId == ownerId then
+						if sentry.personal and sentry.ownerId == ownerId then
 							shouldResupply = false
 							break
 						end

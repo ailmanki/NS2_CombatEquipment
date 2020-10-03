@@ -234,7 +234,8 @@ local function DropStructure(self, player)
             if mine then
             
                 mine:SetOwner(player)
-                
+                mine.personal = true
+                mine.isGhostStructure = false
                 -- Check for space
                 if mine:SpaceClearForEntity(coords.origin) then
                 

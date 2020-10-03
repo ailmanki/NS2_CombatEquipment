@@ -37,22 +37,25 @@ if Client then
                 usageAllowed = usageAllowed and (not GetWarmupActive() or not ent.GetCanBeUsedDuringWarmup or ent:GetCanBeUsedDuringWarmup()) -- check if entity can be used during warmup
                 if usageAllowed then
                     if GetPlayerCanUseEntity(self, ent) then
-                        
+    
                         if ent:isa("CommandStation") and ent:GetIsBuilt() and not self:GetIsUsing() then
                             local hintText = gameStarted and "START_COMMANDING" or "START_GAME"
                             self.actionIconGUI:ShowIcon(BindingsUI_GetInputValue("Use"), nil, hintText, nil)
                             success = true
                         elseif HasMixin(ent, "Digest") and ent:GetIsAlive() then
-    
+        
                             local hintFraction = DigestMixin.GetDigestFraction(ent)
                             -- avoid the slight flicker at the end, caused by the digest effect for Clogs..
                             if hintFraction <= 1.0 then
                                 local hintText = "DESTROY"
                                 self.actionIconGUI:ShowIcon(BindingsUI_GetInputValue("Use"), nil, hintText, hintFraction)
-                                
+            
                                 success = true
                             end
-                            
+    
+                        elseif not self:GetIsUsing() then
+                            self.actionIconGUI:ShowIcon(BindingsUI_GetInputValue("Use"), nil, hintText, nil)
+                            success = true
                         end
                         
                     end

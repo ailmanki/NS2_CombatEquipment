@@ -6,7 +6,8 @@ function MarineTeam:InitTechTree()
     
     PlayingTeam.InitTechTree(self)
     
-    self.techTree:AddBuyNode(kTechId.DropSentry, kTechId.None, kTechId.None)
+    self.techTree:AddResearchNode(kTechId.DropSentryTech,           kTechId.Armory, kTechId.None)
+    self.techTree:AddBuyNode(kTechId.DropSentry, kTechId.DropSentryTech, kTechId.None)
     
     PlayingTeam.InitTechTree = disable
     oldInitTechTree(self)

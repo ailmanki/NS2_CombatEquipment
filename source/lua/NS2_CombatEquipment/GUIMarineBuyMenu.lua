@@ -20,12 +20,25 @@ local old_InitializeItemButtons = GUIMarineBuyMenu._InitializeItemButtons
 function GUIMarineBuyMenu:_InitializeItemButtons()
     old_InitializeItemButtons(self)
     
-    
     if self.itemButtons then
         for i, item in ipairs(self.itemButtons) do
             if item.TechId == kTechId.DropSentry then
                 item.Button:SetTexture(shieldTexture)
                 item.Button:SetTexturePixelCoordinates(0, 0, smallIconWidth, smallIconHeight)
+            end
+        end
+    end
+end
+
+local old_InitializeEquipped = GUIMarineBuyMenu._InitializeEquipped
+function GUIMarineBuyMenu:_InitializeEquipped()
+    old_InitializeEquipped(self)
+    
+    if self.equipped then
+        for i, item in ipairs(self.equipped) do
+            if item.TechId == kTechId.DropSentry then
+                item.Graphic:SetTexture(shieldTexture)
+                item.Graphic:SetTexturePixelCoordinates(0, 0, smallIconWidth, smallIconHeight)
             end
         end
     end

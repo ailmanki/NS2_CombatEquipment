@@ -1,10 +1,13 @@
 Script.Load("lua/DigestMixin.lua")
+Script.Load("lua/LaserMixin.lua")
 
 
 ---- Balance
 --Sentry.kPingInterval = 4
 ---- kFov 160 default
-Sentry.kFov = 180
+if kCombatVersion then
+    Sentry.kFov = 180
+end
 --Sentry.kMaxPitch = 80 -- 160 total
 --Sentry.kMaxYaw = Sentry.kFov / 2
 --Sentry.kTargetScanDelay = 1.5
@@ -17,7 +20,9 @@ Sentry.kFov = 180
 --Sentry.kBarrelMoveRate = 150    -- Degrees per second to move sentry orientation towards target or back to flat when targeted
 --Sentry.kBarrelMoveTargetMult = 4 -- when a target is acquired, how fast to swivel the barrel
 ---- kRange 20 default
-Sentry.kRange = 30
+if kCombatVersion then
+    Sentry.kRange = 30
+end
 --Sentry.kReorientSpeed = .05
 
 --Sentry.kTargetAcquireTime = 0.15
@@ -31,9 +36,11 @@ Sentry.kMaxUseableRange = 6.5
 
 local networkVars =
 {
-    ownerId = "entityid"
+    ownerId = "entityid",
+    personal = "boolean"
 }
 
+AddMixinNetworkVars(LaserMixin, networkVars)
 local kDigestDuration = 1.5
 
 function Sentry:GetDigestDuration()
@@ -43,12 +50,20 @@ end
 function Sentry:GetUseMaxRange()
     return self.kMaxUseableRange
 end
+
 function Sentry:GetCanDigest(player)
-    return player == self:GetOwner() and player:isa("Marine") and (not HasMixin(self, "Live") or self:GetIsAlive())
+    return self.personal and player == self:GetOwner() and player:isa("Marine") and (not HasMixin(self, "Live") or self:GetIsAlive())
 end
 
 function Sentry:GetCanConsumeOverride()
     return false
+end
+
+local oldOnInitialized = Sentry.OnInitialized
+function Sentry:OnInitialized()
+    oldOnInitialized(self)
+    
+    InitMixin(self, LaserMixin)
 end
 
 -- Called by ConstructMixing:OnUse
@@ -73,9 +88,13 @@ local oldOnCreate = Sentry.OnCreate
 function Sentry:OnCreate()
     oldOnCreate(self)
     InitMixin(self, DigestMixin)
-    
+    self.personal = false
 end
 
+function Sentry:Personal()
+    self.isGhostStructure = false
+    self.personal = true
+end
 
 local oldSetLagCompensated = Sentry.SetLagCompensated
 function Sentry:SetLagCompensated(compensate)
@@ -88,21 +107,22 @@ function Sentry:GetCanBeUsed(player, useSuccessTable)
 end
 
 function Sentry:GetCanBeUsedConstructed()
-    return true
+    return self.personal
 end
 
 if not Server then
     function Sentry:GetOwner()
-        return self.ownerId ~= nil and Shared.GetEntity(self.ownerId)
+        return self.personal and self.ownerId ~= nil and Shared.GetEntity(self.ownerId)
     end
 end
 
 local sentry_onpudate = Sentry.OnUpdate
 function Sentry:OnUpdate(deltaTime)
 
-    self.attachedToBattery = true
-    self.lastBatteryCheckTime = Shared.GetTime()
-    
+    if self.personal then
+     self.attachedToBattery = true
+     self.lastBatteryCheckTime = Shared.GetTime()
+    end
     sentry_onpudate(self, deltaTime)
 
 end
@@ -115,12 +135,15 @@ function Sentry:OnUpdateAnimationInput(modelMixin)
     
 end
 
+function Sentry:GetCanRecycleOverride()
+    return self.personal == false -- and Shared.GetEntity(self.ownerId)
+end
 
 function Sentry:GetUnitNameOverride(viewer)
     
     local unitName = GetDisplayName(self)
     
-    if not GetAreEnemies(self, viewer) and self.ownerId then
+    if self.personal and not GetAreEnemies(self, viewer) and self.ownerId then
         local ownerName
         for _, playerInfo in ientitylist(Shared.GetEntitiesWithClassname("PlayerInfoEntity")) do
             if playerInfo.playerId == self.ownerId then
@@ -144,35 +167,37 @@ function Sentry:GetUnitNameOverride(viewer)
 
 end
 
+--- we skip blueprint
 -- fixes blueprint leftover on comsume
-local oldKill = Sentry.Kill
-function Sentry:Kill()
+--local oldKill = Sentry.Kill
+--function Sentry:Kill()
+--
+--    if self.GetIsGhostStructure and self:GetIsGhostStructure() then
+--        -- make it poof!
+--        self:SetHealth(0)
+--        self:OnTakeDamage(0)
+--        return
+--    end
+--    if oldKill then
+--        oldKill(self)
+--    end
+--end
+
+if kCombatVersion then
+    function Sentry:ComputeDamageOverride(attacker, damage, damageType, hitPoint)
+        
+        -- Lerk spikes do double damage to mines.
+        if (damageType == kDamageType.Puncture and attacker:isa("Lerk")) or (damageType == kDamageType.Corrode and attacker:isa("Gorge"))  then
+            damage = damage * 0.5
+        end
+        
+        return damage
     
-    if self.GetIsGhostStructure and self:GetIsGhostStructure() then
-        -- make it poof!
-        self:SetHealth(0)
-        self:OnTakeDamage(0)
-        return
-    end
-    if oldKill then
-        oldKill(self)
     end
 end
-
-function Sentry:ComputeDamageOverride(attacker, damage, damageType, hitPoint)
-    
-    -- Lerk spikes do double damage to mines.
-    if (damageType == kDamageType.Puncture and attacker:isa("Lerk")) or (damageType == kDamageType.Corrode and attacker:isa("Gorge"))  then
-        damage = damage * 0.5
-    end
-    
-    return damage
-
-end
-
 local oldOnDestroy = Sentry.OnDestroy
 function Sentry:OnDestroy()
-    if Server then
+    if self.personal and Server then
         local player = self:GetOwner()
         if player and player:GetIsAlive() then
             local activeWeapon
@@ -189,6 +214,44 @@ function Sentry:OnDestroy()
     end
    
     oldOnDestroy(self)
+end
+
+function GetCheckSentryLimit(techId, origin, normal, commander)
+    
+    -- Prevent the case where a Sentry in one room is being placed next to a
+    -- SentryBattery in another room.
+    local battery = GetSentryBatteryInRoom(origin)
+    if battery then
+        
+        if (battery:GetOrigin() - origin):GetLength() > SentryBattery.kRange then
+            return false
+        end
+    
+    else
+        return false
+    end
+    
+    local location = GetLocationForPoint(origin)
+    local locationName = location and location:GetName() or nil
+    local numInRoom = 0
+    local validRoom = false
+    
+    if locationName then
+        
+        validRoom = true
+        
+        for index, sentry in ientitylist(Shared.GetEntitiesWithClassname("Sentry")) do
+            
+            if false == sentry.personal and sentry:GetLocationName() == locationName then
+                numInRoom = numInRoom + 1
+            end
+        
+        end
+    
+    end
+    
+    return validRoom and numInRoom < kSentriesPerBattery
+
 end
 
 Shared.LinkClassToMap("Sentry", Sentry.kMapName, networkVars, true)

@@ -12,7 +12,7 @@ local function ShouldResupplySentry(player)
 		local ownerId = player:GetId()
 		for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
 			--Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
-			if sentry.ownerId == ownerId then
+			if sentry.personal and sentry.ownerId == ownerId then
 				return false
 			end
 		end

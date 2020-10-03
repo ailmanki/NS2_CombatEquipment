@@ -19,7 +19,8 @@ end
 
 
 -- increase max...
-kTechIdMax = kTechIdMax + 2
+kTechIdMax = kTechIdMax + 3
 
 AppendToEnum(kTechId, "DropSentry")
 AppendToEnum(kTechId, "BuildSentry")
+AppendToEnum(kTechId, "DropSentryTech")
