@@ -17,8 +17,6 @@ ModLoader.SetupFileHook( "lua/Armory.lua",				"lua/NS2_CombatEquipment/Armory.lu
 ModLoader.SetupFileHook( "lua/MarineBuy_Client.lua", "lua/NS2_CombatEquipment/MarineBuy_Client.lua", "post" )
 
 	-- Combat only
-	ModLoader.SetupFileHook( "lua/Armory_Server.lua", "lua/NS2_CombatEquipment/Armory_Server.lua", "post" )
-	
 	ModLoader.SetupFileHook( "lua/Combat/Globals.lua","lua/NS2_CombatEquipment/BalanceCombat.lua", "post" )
 	ModLoader.SetupFileHook( "lua/Combat/FileHooks/Post/Armory_Server.lua","lua/NS2_CombatEquipment/Combat/Armory_Server.lua", "replace" )
 	

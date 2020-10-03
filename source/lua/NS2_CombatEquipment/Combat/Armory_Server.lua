@@ -1,6 +1,6 @@
-
 local grenadeResupplyTime = 15
 local mineResupplyTime = 15
+local sentryResupplyTime = 15
 
 local function ShouldResupplyGrenade(player)
 
@@ -25,12 +25,33 @@ local function ShouldResupplyMine(player)
 	return not mineSlotWeapon and (not player._lastMine or player._lastMine + mineResupplyTime < Shared.GetTime())
 end
 
+local function ShouldResupplySentry(player)
+	
+	if not player:GetIsAlive() then
+		return false
+	end
+	if player:GetHasCombatUpgrade(kCombatUpgrades.Sentries) then
+		
+		local ownerId = player:GetId()
+		for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
+			--Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
+			if sentry.personal and sentry.ownerId == ownerId then
+				return false
+			end
+		end
+	end
+	
+	local sentrySlotWeapon = player:GetWeaponInHUDSlot(BuildSentry.GetHUDSlot())
+	return not sentrySlotWeapon and (not player._lastSentry or player._lastSentry + sentryResupplyTime < Shared.GetTime())
+end
 
 local oldResupply = Armory.ResupplyPlayer
 function Armory:ResupplyPlayer(player)
 	oldResupply(self, player)
 	local gaveGrenade = false
 	local gaveMine = false
+	local gaveSentry = false
+	
 	if ShouldResupplyGrenade(player) then
 	
 		if player:GetHasCombatUpgrade(kCombatUpgrades.ClusterGrenade) then
@@ -60,7 +81,18 @@ function Armory:ResupplyPlayer(player)
 		
 	end
 	
-	if gaveGrenade or gaveMine then
+	if ShouldResupplySentry(player) then
+		
+		if player:GetHasCombatUpgrade(kCombatUpgrades.Sentries) then
+			
+			player:GiveItem(BuildSentry.kMapName)
+			gaveSentry = true
+			player._lastSentry = Shared.GetTime()
+		end
+	
+	end
+	
+	if gaveGrenade or gaveMine or gaveSentry then
 		self:TriggerEffects("armory_ammo", {effecthostcoords = Coords.GetTranslation(player:GetOrigin())})
 	end
 end
@@ -86,6 +118,10 @@ function Armory:GetShouldResupplyPlayer(player)
 				shouldResupply = true
 			end
 			
+		end
+		
+		if ShouldResupplySentry(player) then
+			shouldResupply = true
 		end
 	end
 	
