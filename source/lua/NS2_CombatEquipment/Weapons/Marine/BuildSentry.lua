@@ -305,11 +305,9 @@ function BuildSentry:OnDraw(player, previousWeaponMapName)
 end
 
 function BuildSentry:Dropped(prevOwner)
-
-    self.doNotDynamicServer = true
-    Weapon.Dropped(self, prevOwner)
     
     self:SetModel(kDropModelName)
+    Weapon.Dropped(self, prevOwner)
     
 end
 
