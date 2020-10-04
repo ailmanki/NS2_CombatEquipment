@@ -1,32 +1,1 @@
-name        = "Combat Equipment"
-source_dir  = "source"
-output_dir  = "output"
-description = [=[[h1] Combat Equipment [/h1]
-
-Combatible with vanilla and Combat mod, same prices/timings as shotgun.
-
-ModID: [i]84F2921E[/i]
-
-Vanilla:
-Commander can research personal sentries.
-
-
-Combat mod:
-Upgrade for 1 Sentry. Requires Armor 2 and a Welder to build.
-
-Changes to Sentry balance:
-- the range is increased by 50%
-- fov increased from 160° to 180°
-- halfed dmg from gorge bile and lerk spikes
-
-Code and ideas reused from the following mods, with most coming from Last Stand:
-- [url=steamcommunity.com/sharedfiles/filedetails/?id=873978863] Hades Device [/url]
-- [url=steamcommunity.com/sharedfiles/filedetails/?id=635568146] Last Stand [/url]
-- [url=steamcommunity.com/sharedfiles/filedetails/?id=1173477213] Personal Shield Gnenerator [/url]
-- [url=steamcommunity.com/sharedfiles/filedetails/?id=1218273658] Weapon Switch Improvements [/url]
-
-Thanks to Rusty asked me to create this mod ]=]
-image       = "preview.jpg"
-tag_modtype = "Gameplay Tweak"
-tag_support = "Must be run on Server"
-publish_id = "84f2921e"
+name        = "Combat Equipment"source_dir  = "source"output_dir  = "output"description = [=[Compatible with [url=steamcommunity.com/sharedfiles/filedetails/?id=1383137960]NS2Combat[/url] and vanilla. Same prices and research time as the shotgun.[h1]Vanilla [/h1]Commander can research personal sentries. Only one sentry per player[h1]Combat mod[/h1]Upgrade for one sentry. Requires armor 2 and a welder to build.[list][*] range is increased by 50%[*] fov increased from 160° to 180°[*] halved damage from gorge bile and lerk spikes[/list][hr][/hr][code] ModID: 84F2921E [/code][url=github.com/ailmanki/NS2_CombatEquipment] Source on Github[/url]Code and ideas reused from the following mods, with most coming from Last Stand:[list][*] [url=steamcommunity.com/sharedfiles/filedetails/?id=873978863] Hades Device [/url][*] [url=steamcommunity.com/sharedfiles/filedetails/?id=635568146] Last Stand [/url][*] [url=steamcommunity.com/sharedfiles/filedetails/?id=1173477213] Personal Shield Gnenerator [/url][*] [url=steamcommunity.com/sharedfiles/filedetails/?id=1218273658] Weapon Switch Improvements [/url][/list]Thanks to Rusty for inspiring me!]=]image       = "preview.jpg"tag_modtype = "Gameplay Tweak"tag_support = "Must be run on Server"publish_id = "84f2921e"
