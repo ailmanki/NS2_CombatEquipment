@@ -201,17 +201,20 @@ end
 local oldOnDestroy = Sentry.OnDestroy
 function Sentry:OnDestroy()
     if self.personal and Server then
-        local player = self:GetOwner()
-        if player and player:GetIsAlive() then
-            local activeWeapon
-            if not self.consumed then
-                activeWeapon = player:GetActiveWeapon()
-            end
-            
-            player:GiveItem(BuildSentry.kMapName)
-            
-            if activeWeapon and activeWeapon:GetMapName() then
-                player:SetActiveWeapon(activeWeapon:GetMapName())
+    
+        if kCombatVersion or self.consumed then
+            local player = self:GetOwner()
+            if player and player:GetIsAlive() then
+                local activeWeapon
+                if not self.consumed then
+                    activeWeapon = player:GetActiveWeapon()
+                end
+                
+                player:GiveItem(BuildSentry.kMapName)
+                
+                if activeWeapon and activeWeapon:GetMapName() then
+                    player:SetActiveWeapon(activeWeapon:GetMapName())
+                end
             end
         end
     end
