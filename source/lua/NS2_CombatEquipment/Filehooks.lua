@@ -1,9 +1,11 @@
 
+--ModLoader.SetupFileHook( "lua/GUIPickups.lua", 	"lua/NS2_CombatEquipment/GUIPickups.lua", "replace" )
 ModLoader.SetupFileHook( "lua/TechTreeConstants.lua", 	"lua/NS2_CombatEquipment/TechTreeConstants.lua", "post" )
 ModLoader.SetupFileHook( "lua/TechData.lua", 			"lua/NS2_CombatEquipment/TechData.lua", "post" )
 
 ModLoader.SetupFileHook( "lua/GUIMarineBuyMenu.lua", 	"lua/NS2_CombatEquipment/GUIMarineBuyMenu.lua", "post" )
 ModLoader.SetupFileHook( "lua/Player.lua", 	"lua/NS2_CombatEquipment/Player.lua", "post" )
+--ModLoader.SetupFileHook( "lua/GUIActionIcon.lua", 	"lua/NS2_GorgeTunnel/GUIActionIcon.lua", "replace" )
 
 ModLoader.SetupFileHook( "lua/TechTreeButtons.lua", 	"lua/NS2_CombatEquipment/TechTreeButtons.lua", "post" )
 ModLoader.SetupFileHook( "lua/MarineActionFinderMixin.lua", "lua/NS2_CombatEquipment/MarineActionFinderMixin.lua", "post" )

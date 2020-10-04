@@ -5,9 +5,10 @@ class 'BuildSentry' (Weapon)
 
 BuildSentry.kMapName = "buildsentry"
 
-local kDropModelName = PrecacheAsset("models/marine/sentry/sentry.model")
+--local kDropModelName = PrecacheAsset("models/marine/mine/mine_pile.model") --
+local kDropModelName =PrecacheAsset("models/marine/sentry/sentry.model")
 --local kHeldModelName = PrecacheAsset("models/marine/sentry/sentry.model")
---local kAnimationGraph = PrecacheAsset("models/marine/mine/mine_view.animation_graph")
+local kDropModelNameAnimationGraph = PrecacheAsset("models/marine/sentry/sentry.animation_graph")
 
 local kHeldModelName = PrecacheAsset("models/marine/welder/welder.model") --PrecacheAsset("models/marine/mine/mine_3p.model")
 local kViewModelName = PrecacheAsset("models/marine/welder/welder_view.model") --PrecacheAsset("models/marine/mine/mine_view.model")
@@ -108,7 +109,6 @@ end
 function BuildSentry:OnInitialized()
 
     Weapon.OnInitialized(self)
-    
     self:SetModel(kHeldModelName)
     
 end
@@ -181,16 +181,16 @@ function BuildSentry:Build()
     self.droppingSentry = false
     
 end
-
-function BuildSentry:OnTag(tagName)
-    
-    ClipWeapon.OnTag(self, tagName)
-    
-    if tagName == "mine" then
-        self:Build()        
-    end
-    
-end
+--
+--function BuildSentry:OnTag(tagName)
+--
+--    ClipWeapon.OnTag(self, tagName)
+--
+--    if tagName == "mine" then
+--        self:Build()
+--    end
+--
+--end
 
 function BuildSentry:OnPrimaryAttackEnd()
     self.droppingSentry = false
@@ -306,9 +306,9 @@ function BuildSentry:OnDraw(player, previousWeaponMapName)
 end
 
 function BuildSentry:Dropped(prevOwner)
-    
-    self:SetModel(kDropModelName)
-    Weapon.Dropped(self, prevOwner)
+   
+   self:SetModel(kDropModelName, kDropModelNameAnimationGraph)
+   Weapon.Dropped(self, prevOwner)
     
 end
 
@@ -364,6 +364,15 @@ function BuildSentry:GetPositionForStructure(player)
         --Print("dot: %.2f ", dot)
         if Math.DotProduct(trace.normal, kUpVector) < 0.0 then
             isPositionValid = false -- keep processing so we get a better visualization.
+        end
+        
+        local ownerId = player:GetId()
+        for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
+            --Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
+            if sentry.personal and sentry.ownerId == ownerId then
+                isPositionValid = false
+                break
+            end
         end
         
         -- Don't allow placing above or below us and don't draw either
