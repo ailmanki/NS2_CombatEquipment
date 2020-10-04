@@ -78,10 +78,13 @@ function Sentry:GetCanConstruct(player)
         return false
     end
     
-    local activeWeapon = player:GetActiveWeapon()
+    local activeWeapon
+    if  player.GetActiveWeapon then
+        activeWeapon = player:GetActiveWeapon()
+    end
     
     return not self:GetIsBuilt() and GetAreFriends(self, player) and self:GetIsAlive() and
-            (not player or player:isa("Marine") or player:isa("MAC")) and activeWeapon and activeWeapon:GetMapName() == Welder.kMapName
+            (not player or player:isa("MAC") or (player:isa("Marine") and activeWeapon and activeWeapon:GetMapName() == Welder.kMapName))
 end
 
 local oldOnCreate = Sentry.OnCreate
