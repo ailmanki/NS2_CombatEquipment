@@ -5,10 +5,7 @@ class 'BuildSentry' (Weapon)
 
 BuildSentry.kMapName = "buildsentry"
 
---local kDropModelName = PrecacheAsset("models/marine/mine/mine_pile.model") --
-local kDropModelName =PrecacheAsset("models/marine/sentry/sentry.model")
---local kHeldModelName = PrecacheAsset("models/marine/sentry/sentry.model")
-local kDropModelNameAnimationGraph = PrecacheAsset("models/marine/sentry/sentry.animation_graph")
+local kDropModelName =PrecacheAsset("models/marine/sentry/sentry_drop.model")
 
 local kHeldModelName = PrecacheAsset("models/marine/welder/welder.model") --PrecacheAsset("models/marine/mine/mine_3p.model")
 local kViewModelName = PrecacheAsset("models/marine/welder/welder_view.model") --PrecacheAsset("models/marine/mine/mine_view.model")

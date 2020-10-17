@@ -1,0 +1,3 @@
+geometry        "sentry_drop.dae"
+attach_point	"target"
+physics			"sentry_drop.dae"
