@@ -67,9 +67,10 @@ function Sentry:OnInitialized()
 end
 
 -- Called by ConstructMixing:OnUse
-function Sentry:GetCanConstruct(player)
+function Sentry:GetCanConstruct(constructor)
+    
     if self.GetCanConstructOverride then
-        return self:GetCanConstructOverride(player)
+        return self:GetCanConstructOverride(constructor)
     end
     
     -- Check if we're on infestation
@@ -79,12 +80,17 @@ function Sentry:GetCanConstruct(player)
     end
     
     local activeWeapon
-    if  player.GetActiveWeapon then
-        activeWeapon = player:GetActiveWeapon()
+    if  constructor.GetActiveWeapon then
+        activeWeapon = constructor:GetActiveWeapon()
     end
     
-    return not self:GetIsBuilt() and GetAreFriends(self, player) and self:GetIsAlive() and
-            (not player or player:isa("MAC") or (player:isa("Marine") and activeWeapon and activeWeapon:GetMapName() == Welder.kMapName))
+    
+    return not self:GetIsBuilt() and GetAreFriends(self, constructor) and self:GetIsAlive() and
+            (not constructor or constructor:isa("MAC") or
+                    (constructor:isa("Marine") and not self.personal or
+                            (activeWeapon and activeWeapon:GetMapName() == Welder.kMapName)
+                    )
+            )
 end
 
 local oldOnCreate = Sentry.OnCreate
@@ -169,22 +175,6 @@ function Sentry:GetUnitNameOverride(viewer)
     return unitName
 
 end
-
---- we skip blueprint
--- fixes blueprint leftover on comsume
---local oldKill = Sentry.Kill
---function Sentry:Kill()
---
---    if self.GetIsGhostStructure and self:GetIsGhostStructure() then
---        -- make it poof!
---        self:SetHealth(0)
---        self:OnTakeDamage(0)
---        return
---    end
---    if oldKill then
---        oldKill(self)
---    end
---end
 
 if kCombatVersion then
     function Sentry:ComputeDamageOverride(attacker, damage, damageType, hitPoint)
