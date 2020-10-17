@@ -114,7 +114,9 @@ end
 function Sentry:GetCanBeUsed(player, useSuccessTable)
     useSuccessTable.useSuccess = useSuccessTable.useSuccess and self:GetCanDigest(player)
 end
-
+function Sentry:OverrideLaserLength()
+    return 30
+end
 function Sentry:GetCanBeUsedConstructed()
     return self.personal
 end
@@ -129,8 +131,8 @@ local sentry_onpudate = Sentry.OnUpdate
 function Sentry:OnUpdate(deltaTime)
 
     if self.personal then
-     self.attachedToBattery = true
-     self.lastBatteryCheckTime = Shared.GetTime()
+        self.attachedToBattery = true
+        self.lastBatteryCheckTime = Shared.GetTime()
     end
     sentry_onpudate(self, deltaTime)
 
