@@ -27,17 +27,25 @@ function MarineBuy_GetEquipment()
     local inventory = oldMarineBuy_GetEquipment()
 
     local player = Client.GetLocalPlayer()
-    
+
     if player then
-        local ownerId = player:GetId()
-        for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
-            --Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
-            if sentry.personal and sentry.ownerId == ownerId then
-                inventory[kTechId.DropSentry] = true
-                break
-            end
-        end
+    
+        local items = GetChildEntities(player, "ScriptActor")
+    
+        for _, item in ipairs(items) do
         
+            local techId = item:GetTechId()
+            if techId == kTechId.DropSentry then
+                inventory[kTechId.DropSentry] = true
+                if item.hasMine then
+                    inventory[kTechId.LayMines] = true
+                end
+            elseif techId == kTechId.LayMines and item.hasSentry then
+                inventory[kTechId.DropSentry] = true
+            end
+    
+        end
+
     end
 
     return inventory
@@ -58,24 +66,15 @@ function MarineBuy_GetEquipped()
         local techId = item:GetTechId()
         if techId == kTechId.DropSentry then
             table.insertunique(equipped, kTechId.DropSentry)
-    
-            return equipped
-        end
-    
-    end
-    
-    if player then
-        local ownerId = player:GetId()
-        for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
-            --Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
-            if sentry.personal and sentry.ownerId == ownerId then
-                table.insertunique(equipped, kTechId.DropSentry)
-                break
+            if item.hasMine then
+                table.insertunique(equipped, kTechId.LayMines)
             end
+        elseif techId == kTechId.LayMines and item.hasSentry then
+            table.insertunique(equipped, kTechId.DropSentry)
         end
     
     end
-
+    
     return equipped
 
 end
