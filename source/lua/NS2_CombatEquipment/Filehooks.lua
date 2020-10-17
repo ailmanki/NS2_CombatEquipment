@@ -12,7 +12,7 @@ ModLoader.SetupFileHook( "lua/MarineActionFinderMixin.lua", "lua/NS2_CombatEquip
 ModLoader.SetupFileHook( "lua/MarineTeam.lua", "lua/NS2_CombatEquipment/MarineTeam.lua", "post" )
 ModLoader.SetupFileHook( "lua/MarineTechMap.lua", "lua/NS2_CombatEquipment/MarineTechMap.lua", "post" )
 
-ModLoader.SetupFileHook( "lua/Marine_Server.lua", "lua/NS2_CombatEquipment/Marine_Server.lua", "post" )
+--ModLoader.SetupFileHook( "lua/Marine_Server.lua", "lua/NS2_CombatEquipment/Marine_Server.lua", "post" )
 
 ModLoader.SetupFileHook( "lua/Balance.lua",				"lua/NS2_CombatEquipment/Balance.lua", "post" )
 ModLoader.SetupFileHook( "lua/Armory.lua",				"lua/NS2_CombatEquipment/Armory.lua", "post" )
