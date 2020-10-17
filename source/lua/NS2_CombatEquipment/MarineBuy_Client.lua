@@ -6,7 +6,7 @@ function MarineBuy_GetWeaponDescription(techId)
         return oldMarineBuy_GetWeaponDescription(techId)
     end
     
-    local description = "Requires a welder to build! The AI sentry gun targets and fires automatically upon any aliens in its line of sight."
+    local description = "The AI sentry gun targets and fires automatically upon any aliens in its line of sight. Requires a welder to build! Only one can be deployed at a time!"
 
     local techTree = GetTechTree()
     
