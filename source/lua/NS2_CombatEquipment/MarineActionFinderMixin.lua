@@ -47,7 +47,7 @@ if Client then
                             local hintFraction = DigestMixin.GetDigestFraction(ent)
                             -- avoid the slight flicker at the end, caused by the digest effect for Clogs..
                             if hintFraction <= 1.0 then
-                                local hintText = "DESTROY"
+                                local hintText = "RECYCLE"
                                 self.actionIconGUI:ShowIcon(BindingsUI_GetInputValue("Use"), nil, hintText, hintFraction)
             
                                 success = true
