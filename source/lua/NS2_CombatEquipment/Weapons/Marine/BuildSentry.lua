@@ -305,13 +305,14 @@ function BuildSentry:OnDraw(player, previousWeaponMapName)
     
 end
 
+
 function BuildSentry:Dropped(prevOwner)
-   
+    
    self:SetModel(kDropModelName, kDropModelNameAnimationGraph)
    Weapon.Dropped(self, prevOwner)
     
-end
-
+    end
+    
 local kUpVector = Vector(0, 1, 0)
 -- Given a gorge player's position and view angles, return a position and orientation
 -- for structure. Used to preview placement via a ghost structure and then to create it.
@@ -321,19 +322,21 @@ function BuildSentry:GetPositionForStructure(player)
     local isPositionValid = false
     local foundPositionInRange = false
     local structPosition
-
-    local origin = player:GetEyePos() + player:GetViewAngles():GetCoords().zAxis * kPlacementDistance
+    
+    local traceStart = player:GetEyePos()
+    local viewVec = player:GetViewAngles():GetCoords().zAxis
+    local traceEnd = traceStart + viewVec * kPlacementDistance
     
     -- Trace short distance in front
-    local trace = Shared.TraceRay(player:GetEyePos(), origin, CollisionRep.Default, PhysicsMask.AllButPCsAndRagdolls, EntityFilterTwo(player, self))
+    local trace = Shared.TraceRay(traceStart, traceEnd, CollisionRep.Default, PhysicsMask.AllButPCsAndRagdolls, EntityFilterTwo(player, self))
     
     local displayOrigin = trace.endPoint
     
     -- If we hit nothing, trace down to place on ground
     if trace.fraction == 1 then
     
-        origin = player:GetEyePos() + player:GetViewAngles():GetCoords().zAxis * kPlacementDistance
-        trace = Shared.TraceRay(origin, origin - Vector(0, kPlacementDistance, 0), CollisionRep.Default, PhysicsMask.AllButPCsAndRagdolls, EntityFilterTwo(player, self))
+        traceStart = traceStart + viewVec * kPlacementDistance
+        trace = Shared.TraceRay(traceStart, traceStart - Vector(0, kPlacementDistance, 0), CollisionRep.Default, PhysicsMask.AllButPCsAndRagdolls, EntityFilterTwo(player, self))
         
     end
     
@@ -345,7 +348,7 @@ function BuildSentry:GetPositionForStructure(player)
     
         if trace.entity == nil then
             isPositionValid = true
-        elseif not trace.entity:isa("ScriptActor") and not trace.entity:isa("Clog") then
+        elseif not trace.entity:isa("ScriptActor") and not trace.entity:isa("Clog") and not trace.entity:isa("Web") then
             isPositionValid = true
         end
         
@@ -358,6 +361,10 @@ function BuildSentry:GetPositionForStructure(player)
     
         -- Don't allow dropped structures to go too close to techpoints and resource nozzles
         if GetPointBlocksAttachEntities(displayOrigin) then
+            isPositionValid = false
+        end
+    
+        if trace.surface == "nocling" then
             isPositionValid = false
         end
         
@@ -376,12 +383,18 @@ function BuildSentry:GetPositionForStructure(player)
         end
         
         -- Don't allow placing above or below us and don't draw either
-        local structureFacing = player:GetViewAngles():GetCoords().zAxis
+        local structureFacing = Vector(viewVec)
     
         if math.abs(Math.DotProduct(trace.normal, structureFacing)) > 0.9 then
             structureFacing = trace.normal:GetPerpendicular()
         end
     
+        -- Sometimes the trace normal is pointing the opposite direction it should.
+        local idealFacing = traceStart - displayOrigin
+        if Math.DotProduct(idealFacing, trace.normal) < 0 then
+            trace.normal = -trace.normal
+        end
+        
         -- Coords.GetLookIn will prioritize the direction when constructing the coords,
         -- so make sure the facing direction is perpendicular to the normal so we get
         -- the correct y-axis.
