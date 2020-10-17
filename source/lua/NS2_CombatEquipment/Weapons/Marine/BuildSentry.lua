@@ -151,12 +151,12 @@ function BuildSentry:GetHUDSlot()
     return 4
 end
 
-function BuildSentry:Build()
+function BuildSentry:Build(coords, valid)
 
     local player = self:GetParent()
     if player then
     
-        self:PerformPrimaryAttack(player)
+        self:PerformPrimaryAttack(player, coords, valid)
 
         self:OnHolster(player)
         
@@ -182,8 +182,8 @@ end
 --function BuildSentry:OnTag(tagName)
 --
 --    ClipWeapon.OnTag(self, tagName)
---
---    if tagName == "mine" then
+--    Print(tagName)
+--    if tagName == "shoot" then
 --        self:Build()
 --    end
 --
@@ -202,10 +202,10 @@ function BuildSentry:OnPrimaryAttack(player)
     -- Ensure the current location is valid for placement.
     if not player:GetPrimaryAttackLastFrame() then
     
-        local _, _, valid = self:GetPositionForStructure(player)
+        local _, coords, valid = self:GetPositionForStructure(player)
         if valid then
             self.droppingSentry = true
-            self:Build()
+            self:Build(coords, valid)
         else
             self.droppingSentry = false
             
@@ -219,26 +219,26 @@ function BuildSentry:OnPrimaryAttack(player)
     
 end
 
-local function DropStructure(self, player)
+local function DropStructure(self, player, coords, valid)
 
     if Server then
     
-        local _, coords, valid = self:GetPositionForStructure(player)
+       -- local _, coords, valid = self:GetPositionForStructure(player)
         if valid then
         
             -- Create mine.
-            local mine = CreateEntity(self:GetDropMapName(), coords.origin, player:GetTeamNumber())
-            if mine then
-            
-                mine:SetOwner(player)
-                mine.personal = true
-                mine.isGhostStructure = false
+            local sentry = CreateEntity(self:GetDropMapName(), coords.origin, player:GetTeamNumber())
+            if sentry then
+    
+                sentry:SetOwner(player)
+                sentry.personal = true
+                sentry.isGhostStructure = false
                 -- Check for space
-                if mine:SpaceClearForEntity(coords.origin) then
+                if sentry:SpaceClearForEntity(coords.origin) then
                 
                     local angles = Angles()
                     angles:BuildFromCoords(coords)
-                    mine:SetAngles(angles)
+                    sentry:SetAngles(angles)
                     
                     player:TriggerEffects("create_" .. self:GetSuffixName())
                     
@@ -248,7 +248,7 @@ local function DropStructure(self, player)
                 else
                 
                     player:TriggerInvalidSound()
-                    DestroyEntity(mine)
+                    DestroyEntity(sentry)
                     
                 end
                 
@@ -272,10 +272,10 @@ local function DropStructure(self, player)
     
 end
 
-function BuildSentry:PerformPrimaryAttack(player)
+function BuildSentry:PerformPrimaryAttack(player, coords, valid)
     player:TriggerEffects("start_create_" .. self:GetSuffixName())
 
-    local success = DropStructure(self, player)
+    local success = DropStructure(self, player, coords, valid)
             
     return success
     
@@ -308,7 +308,7 @@ function BuildSentry:Dropped(prevOwner)
    self:SetModel(kDropModelName, kDropModelNameAnimationGraph)
    Weapon.Dropped(self, prevOwner)
     
-    end
+end
     
 local kUpVector = Vector(0, 1, 0)
 -- Given a gorge player's position and view angles, return a position and orientation
@@ -350,60 +350,59 @@ function BuildSentry:GetPositionForStructure(player)
         end
         
         displayOrigin = trace.endPoint
-        
-        -- Can not be built on infestation
-        if GetIsPointOnInfestation(displayOrigin) then
-            isPositionValid = false
-        end
-    
-        -- Don't allow dropped structures to go too close to techpoints and resource nozzles
-        if GetPointBlocksAttachEntities(displayOrigin) then
-            isPositionValid = false
-        end
-    
-        if trace.surface == "nocling" then
-            isPositionValid = false
-        end
-        
-        --Print("dot: %.2f ", dot)
-        if Math.DotProduct(trace.normal, kUpVector) < 0.0 then
-            isPositionValid = false -- keep processing so we get a better visualization.
-        end
-        
-        local ownerId = player:GetId()
-        for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
-            --Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
-            if sentry.personal and sentry.ownerId == ownerId then
-                isPositionValid = false
-                break
-            end
-        end
-        
-        -- Don't allow placing above or below us and don't draw either
-        local structureFacing = Vector(viewVec)
-    
-        if math.abs(Math.DotProduct(trace.normal, structureFacing)) > 0.9 then
-            structureFacing = trace.normal:GetPerpendicular()
-        end
-    
-        -- Sometimes the trace normal is pointing the opposite direction it should.
-        local idealFacing = traceStart - displayOrigin
-        if Math.DotProduct(idealFacing, trace.normal) < 0 then
-            trace.normal = -trace.normal
-        end
-        
-        -- Coords.GetLookIn will prioritize the direction when constructing the coords,
-        -- so make sure the facing direction is perpendicular to the normal so we get
-        -- the correct y-axis.
-        local perp = Math.CrossProduct(trace.normal, structureFacing)
-        structureFacing = Math.CrossProduct(perp, trace.normal)
-    
-        structPosition = Coords.GetLookIn(displayOrigin, structureFacing, trace.normal)
-        
+    end
+    -- Can not be built on infestation
+    if GetIsPointOnInfestation(displayOrigin) then
+        isPositionValid = false
     end
     
-    return foundPositionInRange, structPosition, isPositionValid
+    -- Don't allow dropped structures to go too close to techpoints and resource nozzles
+    if GetPointBlocksAttachEntities(displayOrigin) then
+        isPositionValid = false
+    end
     
+    if trace.surface == "nocling" then
+        isPositionValid = false
+    end
+        
+    --Print("dot: %.2f ", dot)
+    if Math.DotProduct(trace.normal, kUpVector) < 0.0 then
+        isPositionValid = false -- keep processing so we get a better visualization.
+    end
+        
+    local ownerId = player:GetId()
+    for _, sentry in ientitylist( Shared.GetEntitiesWithClassname("Sentry") ) do
+        --Print("ownerId: " .. sentry.ownerId .. ", clientId: " .. ownerId)
+        if sentry.personal and sentry.ownerId == ownerId then
+            isPositionValid = false
+            break
+        end
+    end
+        
+    -- Don't allow placing above or below us and don't draw either
+    local structureFacing = Vector(viewVec)
+    
+    --if math.abs(Math.DotProduct(trace.normal, structureFacing)) > 0.9 then
+    --structureFacing = trace.normal:GetPerpendicular()
+    --end
+    
+    -- Sometimes the trace normal is pointing the opposite direction it should.
+    local idealFacing = traceStart - displayOrigin
+    if Math.DotProduct(idealFacing, trace.normal) < 0 then
+        trace.normal = -trace.normal
+    end
+        
+    -- Coords.GetLookIn will prioritize the direction when constructing the coords,
+    -- so make sure the facing direction is perpendicular to the normal so we get
+    -- the correct y-axis.
+    local perp = Math.CrossProduct(trace.normal, structureFacing)
+    structureFacing = Math.CrossProduct(perp, trace.normal)
+    
+    structPosition = Coords.GetLookIn(displayOrigin, structureFacing, trace.normal)
+    
+    
+    return foundPositionInRange, structPosition, isPositionValid
+
 end
 
 function BuildSentry:GetGhostModelName()
