@@ -17,8 +17,10 @@ function WeaponOwnerMixin:AddWeapon(weapon, setActive)
 				--Print("techid: LayMines")
 				weapon.hasMine = true
 			end
-			self:RemoveWeapon(hasWeapon)
-			DestroyEntity(hasWeapon)
+			if kCombatVersion then
+				self:RemoveWeapon(hasWeapon)
+				DestroyEntity(hasWeapon)
+			end
 		end
 	end
 	
