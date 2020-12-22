@@ -105,11 +105,6 @@ function Sentry:Personal()
     self.personal = true
 end
 
-local oldSetLagCompensated = Sentry.SetLagCompensated
-function Sentry:SetLagCompensated(compensate)
-    oldSetLagCompensated(self, true)
-end
-
 -- CQ: Predates Mixins, somewhat hackish
 function Sentry:GetCanBeUsed(player, useSuccessTable)
     useSuccessTable.useSuccess = useSuccessTable.useSuccess and self:GetCanDigest(player)
@@ -142,7 +137,7 @@ function Sentry:OnUpdateAnimationInput(modelMixin)
 
     PROFILE("Sentry:OnUpdateAnimationInput")    
     modelMixin:SetAnimationInput("attack", self.attacking)
-    modelMixin:SetAnimationInput("powered", true)
+    modelMixin:SetAnimationInput("powered", self.personal or self.attachedToBattery)
     
 end
 

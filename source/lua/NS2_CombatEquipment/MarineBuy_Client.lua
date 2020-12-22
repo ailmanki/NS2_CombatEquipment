@@ -9,7 +9,6 @@ function MarineBuy_GetWeaponDescription(techId)
     local description = "The AI sentry gun targets and fires automatically upon any aliens in its line of sight. Requires a welder to build! Only one can be deployed at a time!"
 
     local techTree = GetTechTree()
-    
     local requires = techTree:GetRequiresText(techId)
 
     if requires ~= "" then

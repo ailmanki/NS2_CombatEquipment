@@ -26,7 +26,8 @@ function BuildTechData()
 				[kTechDataCostKey] = kCombatEquipmentSentryResearchCost,
 				[kTechDataResearchTimeKey] = kCombatEquipmentSentryResearchTime,
 				[kTechDataDisplayName] = "Research AI sentry guns",
-				[kTechDataTooltipInfo] = "Allows purchasing AI sentry guns from armories."
+				[kTechDataTooltipInfo] = "Allows purchasing AI sentry guns from armories.",
+				[kTechDataResearchName] = "Sentries"
 			})
 		end
 	

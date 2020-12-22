@@ -7,17 +7,24 @@ function WeaponOwnerMixin:AddWeapon(weapon, setActive)
 	if 4 == hudSlot then
 		local hasWeapon = self:GetWeaponInHUDSlot(hudSlot)
 		if hasWeapon then
+			local removeOld = false
 			--Print("kMapName: " .. hasWeapon.kMapName)
 			if hasWeapon.kMapName == BuildSentry.kMapName then
 				--Print("techid: BuildSentry")
+				if weapon.kMapName == LayMines.kMapName then
+					removeOld = true
+				end
 				weapon.hasSentry = true
 			end
 			
 			if hasWeapon.kMapName == LayMines.kMapName then
 				--Print("techid: LayMines")
+				if weapon.kMapName == BuildSentry.kMapName then
+					removeOld = true
+				end
 				weapon.hasMine = true
 			end
-			if kCombatVersion then
+			if removeOld then
 				self:RemoveWeapon(hasWeapon)
 				DestroyEntity(hasWeapon)
 			end

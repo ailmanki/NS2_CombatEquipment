@@ -106,9 +106,8 @@ local kBounceAmount = 0.05
 
 class 'GUIPickups' (GUIScript)
 
-GUIPickups.kUseColorIndicatorForExpirationBars = true
-GUIPickups.kShouldShowExpirationBars = true
-GUIPickups.kOnlyShowExpirationBarsForWeapons = false
+GUIPickups.kExpirationBarMode = GetAdvancedOption("pickupexpire")
+GUIPickups.kUseColorIndicatorForExpirationBars = GetAdvancedOption("pickupexpirecolor") == 1
 
 function GUIPickups:Initialize()
 
@@ -188,7 +187,8 @@ function GUIPickups_GetExpirationBarColor( timeLeft, alpha )
             return Color(1, 0, 0, alpha)
         end
     end
-    return Color(0, 0.6117, 1, distance)
+
+    return Color(0, 0.6117, 1, alpha)
 end
 
 function GUIPickups:Update()
@@ -217,9 +217,9 @@ function GUIPickups:Update()
                 local timeLeft = pickup.GetExpireTimeFraction and pickup:GetExpireTimeFraction() or 0
 
                 local isBarVisible = false
-                if GUIPickups.kShouldShowExpirationBars then
+                if GUIPickups.kExpirationBarMode == 2 then
                     isBarVisible = timeLeft > 0
-                elseif GUIPickups.kOnlyShowExpirationBarsForWeapons then
+                elseif GUIPickups.kExpirationBarMode == 1 then
                     isBarVisible = timeLeft > 0 and pickup:isa("Weapon")
                 end
 
