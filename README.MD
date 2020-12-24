@@ -5,7 +5,7 @@
 
 ![Preview](preview.jpg)
 
-Compatible with [NS2Combat](steamcommunity.com/sharedfiles/filedetails/?id=1383137960) and vanilla. Same prices and research time as the shotgun.
+Compatible with [NS2Combat](https://steamcommunity.com/sharedfiles/filedetails/?id=1383137960) and vanilla. Same prices and research time as the shotgun.
 
 # Vanilla
 Commander can research personal sentries. Only one sentry per player
@@ -21,13 +21,13 @@ Upgrade for one sentry. Requires armor 2 and a welder to build.
 ```
 ModID: 84F2921E
 ```
-[Source on Github](github.com/ailmanki/NS2_CombatEquipment)
+[Source on Github](https://github.com/ailmanki/NS2_CombatEquipment)
 
 Code and ideas reused from the following mods, with most coming from Last Stand:
-- [Hades Device](steamcommunity.com/sharedfiles/filedetails/?id=873978863)
-- [Last Stand](steamcommunity.com/sharedfiles/filedetails/?id=635568146)
-- [Personal Shield Gnenerator](steamcommunity.com/sharedfiles/filedetails/?id=1173477213)
-- [Weapon Switch Improvements](steamcommunity.com/sharedfiles/filedetails/?id=1218273658)
+- [Hades Device](https://steamcommunity.com/sharedfiles/filedetails/?id=873978863)
+- [Last Stand](https://steamcommunity.com/sharedfiles/filedetails/?id=635568146)
+- [Personal Shield Gnenerator](https://steamcommunity.com/sharedfiles/filedetails/?id=1173477213)
+- [Weapon Switch Improvements](https://steamcommunity.com/sharedfiles/filedetails/?id=1218273658)
 
 
 Thanks to Rusty for inspiring me!
