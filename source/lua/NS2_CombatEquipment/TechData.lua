@@ -12,6 +12,7 @@ function BuildTechData()
 				[kTechDataMapName] = BuildSentry.kMapName,
 				[kTechDataDisplayName] = "Sentry",
 				[kTechDataModel] = Sentry.kModelName,
+				[kTechDataPointValue] = kCombatEquipmentSentryPointValue,
 				[kTechDataCostKey] = kCombatEquipmentSentryCost,
 				[kStructureAttachId] = { kTechId.Armory, kTechId.AdvancedArmory },
 			})
