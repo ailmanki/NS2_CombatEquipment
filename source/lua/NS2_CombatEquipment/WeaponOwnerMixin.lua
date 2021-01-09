@@ -11,9 +11,9 @@ function WeaponOwnerMixin:AddWeapon(weapon, setActive)
 			--Print("kMapName: " .. hasWeapon.kMapName)
 			if hasWeapon.kMapName == BuildSentry.kMapName then
 				--Print("techid: BuildSentry")
-				if weapon.kMapName == LayMines.kMapName then
-					removeOld = true
-				end
+				--if weapon.kMapName == LayMines.kMapName then
+				removeOld = true
+				--end
 				weapon.hasSentry = true
 			end
 			
